@@ -51,3 +51,7 @@ jobs:
         run: |
           docker push ghcr.io/${{ github.repository }}:${{ github.sha }}
           docker push ghcr.io/${{ github.repository }}:production
+
+      - name: Deploy to Render
+        if: github.event_name == 'push'
+        run: curl -f -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"

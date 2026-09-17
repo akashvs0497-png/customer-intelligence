@@ -4,10 +4,13 @@ from fastapi.testclient import TestClient
 from app import app, get_churn_threshold
 
 
-client = TestClient(app)
+@pytest.fixture
+def client():
+    with TestClient(app) as test_client:
+        yield test_client
 
 
-def test_health():
+def test_health(client):
     response = client.get("/health")
 
     assert response.status_code == 200
@@ -15,13 +18,13 @@ def test_health():
         "status": "healthy"
     }
 
-def test_ready():
+def test_ready(client):
     response = client.get("/ready")
 
     assert response.status_code == 200
     assert response.json() == {"status": "ready"}
 
-def test_info():
+def test_info(client):
     response = client.get("/info")
 
     assert response.status_code == 200
@@ -33,7 +36,7 @@ def test_info():
     assert data["model_version"] == "1.0"
     assert 0 <= data["churn_threshold"] <= 1
 
-def test_predict_valid_customer():
+def test_predict_valid_customer(client):
     customer = {
         "tenure_months": 6,
         "monthly_charges": 95.0,
@@ -57,7 +60,7 @@ def test_predict_valid_customer():
 
     assert 0 <= data["churn_probability"] <= 1
 
-def test_predict_invalid_customer():
+def test_predict_invalid_customer(client):
     customer = {
         "tenure_months": -10,
         "monthly_charges": 95.0,

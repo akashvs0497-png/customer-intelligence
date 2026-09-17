@@ -1,6 +1,7 @@
-from fastapi.testclient import TestClient
+import pytest
 
-from app import app
+from fastapi.testclient import TestClient
+from app import app, get_churn_threshold
 
 
 client = TestClient(app)
@@ -52,3 +53,28 @@ def test_predict_invalid_customer():
     )
 
     assert response.status_code == 422
+
+def test_churn_threshold_valid(monkeypatch):
+    monkeypatch.setenv("CHURN_THRESHOLD", "0.4")
+
+    assert get_churn_threshold() == 0.4
+
+
+def test_churn_threshold_not_number(monkeypatch):
+    monkeypatch.setenv("CHURN_THRESHOLD", "hello")
+
+    with pytest.raises(
+        ValueError,
+        match="CHURN_THRESHOLD must be a number",
+    ):
+        get_churn_threshold()
+
+
+def test_churn_threshold_out_of_range(monkeypatch):
+    monkeypatch.setenv("CHURN_THRESHOLD", "1.5")
+
+    with pytest.raises(
+        ValueError,
+        match="CHURN_THRESHOLD must be between 0 and 1",
+    ):
+        get_churn_threshold()

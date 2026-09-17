@@ -58,6 +58,8 @@ def get_churn_threshold():
 
 
 CHURN_THRESHOLD = get_churn_threshold()
+SERVICE_VERSION = "1.0.0"
+MODEL_VERSION = "1.0"
 
 logger.info(
     "Application initialized with churn_threshold=%s",
@@ -86,6 +88,25 @@ def health():
         "status": "healthy"
     }
 
+@app.get("/ready")
+def ready():
+    if model is None:
+        return {
+            "status": "not_ready"
+        }
+
+    return {
+        "status": "ready"
+    }
+
+@app.get("/info")
+def info():
+    return {
+        "service": "customer-intelligence",
+        "service_version": SERVICE_VERSION,
+        "model_version": MODEL_VERSION,
+        "churn_threshold": CHURN_THRESHOLD,
+    }
 
 # -------------------------
 # Prediction endpoint

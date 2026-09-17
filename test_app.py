@@ -15,6 +15,24 @@ def test_health():
         "status": "healthy"
     }
 
+def test_ready():
+    response = client.get("/ready")
+
+    assert response.status_code == 200
+    assert response.json() == {"status": "ready"}
+
+def test_info():
+    response = client.get("/info")
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert data["service"] == "customer-intelligence"
+    assert data["service_version"] == "1.0.0"
+    assert data["model_version"] == "1.0"
+    assert 0 <= data["churn_threshold"] <= 1
+
 def test_predict_valid_customer():
     customer = {
         "tenure_months": 6,

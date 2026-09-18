@@ -75,6 +75,36 @@ def test_predict_invalid_customer(client):
 
     assert response.status_code == 422
 
+def test_sentiment_valid_text(client):
+    payload = {
+        "text": "The support team was excellent and very helpful"
+    }
+
+    response = client.post(
+        "/sentiment",
+        json=payload,
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert data["sentiment"] in ["positive", "negative"]
+    assert 0 <= data["confidence"] <= 1
+
+
+def test_sentiment_empty_text(client):
+    payload = {
+        "text": ""
+    }
+
+    response = client.post(
+        "/sentiment",
+        json=payload,
+    )
+
+    assert response.status_code == 422
+
 def test_churn_threshold_valid(monkeypatch):
     monkeypatch.setenv("CHURN_THRESHOLD", "0.4")
 

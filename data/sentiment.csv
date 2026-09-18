@@ -1,0 +1,21 @@
+text,sentiment
+"The service was excellent and my issue was resolved quickly",positive
+"I am very happy with the support I received",positive
+"The agent was helpful and solved my problem",positive
+"Great experience and very fast service",positive
+"I am satisfied with the product and support",positive
+"Customer service handled my request perfectly",positive
+"The response was quick and professional",positive
+"My problem was fixed immediately thank you",positive
+"I had a wonderful experience with the service",positive
+"The support team did an excellent job",positive
+"I am disappointed and my issue is still unresolved",negative
+"The service was terrible and extremely slow",negative
+"I have called several times and nobody helped me",negative
+"Very poor customer support and frustrating experience",negative
+"My problem has still not been fixed",negative
+"I am unhappy with the service I received",negative
+"The agent was rude and completely unhelpful",negative
+"This has been a terrible experience",negative
+"I waited for hours without getting any support",negative
+"The product keeps failing and I am very frustrated",negative
